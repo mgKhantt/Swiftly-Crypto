@@ -19,7 +19,7 @@ import Foundation
 //   let welcome = try? JSONDecoder().decode(Welcome.self, from: jsonData)
 
 struct CoinModel: Identifiable, Codable {
-    let id, symbol, name: String?
+    let id, symbol, name: String
     let image: String?
     let currentPrice: Double
     let marketCap, marketCapRank, fullyDilutedValuation: Double?

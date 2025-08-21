@@ -66,9 +66,9 @@ extension CoinRowView {
                 .foregroundStyle(Color.theme.secondaryText)
                 .frame(minWidth: 30)
             
-            CoinImageView(imageURL: coin.image ?? "NA", coinID: coin.id ?? "")
+            CoinImageView(imageURL: coin.image ?? "NA", coinID: coin.id)
             
-            Text("\(coin.symbol?.uppercased() ?? "Loading...")")
+            Text("\(coin.symbol.uppercased())")
                 .font(.headline)
                 .padding(.leading, 6)
                 .foregroundStyle(Color.theme.accent)
