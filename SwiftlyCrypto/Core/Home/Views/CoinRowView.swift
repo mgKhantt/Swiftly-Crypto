@@ -29,6 +29,31 @@ struct CoinRowView: View {
     }
 }
 
+struct CoinImageView: View {
+    
+    @StateObject private var imageService: CoinImageService
+        
+    init(imageURL: String, coinID: String) {
+        _imageService = StateObject(wrappedValue: CoinImageService(imageName: coinID, imageURL: imageURL))
+    }
+        
+    var body: some View {
+        
+        Group {
+            if let uiImage = imageService.image {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+            } else {
+                ProgressView()
+                    .frame(width: 30, height: 30)
+            }
+        }
+    }
+}
+
+
 #Preview(traits: .sizeThatFitsLayout) {
     CoinRowView(coin: dev.coin, showHoldingColumn: true)
 }
@@ -41,13 +66,7 @@ extension CoinRowView {
                 .foregroundStyle(Color.theme.secondaryText)
                 .frame(minWidth: 30)
             
-            AsyncImage(url: URL(string: coin.image ?? "")) { image in
-                    image.resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-            } placeholder: {
-                ProgressView()
-            }
+            CoinImageView(imageURL: coin.image ?? "NA", coinID: coin.id ?? "")
             
             Text("\(coin.symbol?.uppercased() ?? "Loading...")")
                 .font(.headline)
