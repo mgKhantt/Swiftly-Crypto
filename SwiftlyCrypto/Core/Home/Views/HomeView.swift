@@ -16,9 +16,14 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             Color.theme.background.ignoresSafeArea()
+                .onTapGesture {
+                    hideKeyboard()
+                }
             
             VStack {
                 homeHeader
+                
+                SearchBarView(searchText: $vm.searchText)
                 
                 columnTitles
                 

@@ -13,7 +13,8 @@ class CoinImageService: ObservableObject {
     
     private var imageName: String
     private var imageURL: String
-    private var currentFolderName: String = "coins"
+    private let currentFolderName: String = "coins"
+    private let fileManager = LocalFileManager.instance
     
     init(imageName: String, imageURL: String) {
         self.imageName = imageName
@@ -25,7 +26,7 @@ class CoinImageService: ObservableObject {
     
     private func getImage() {
         // 1. Check cache first
-        if let savedImage = LocalFileManager.instance.getImage(imageName: imageName, folderName: currentFolderName) {
+        if let savedImage = fileManager.getImage(imageName: imageName, folderName: currentFolderName) {
             image = savedImage
             print("✅ Loaded image from cache: \(imageName)")
             return
@@ -50,7 +51,7 @@ class CoinImageService: ObservableObject {
                 
                 // Save in background
                 DispatchQueue.global(qos: .background).async {
-                    LocalFileManager.instance.saveImage(image: downloadedImage, imageName: self.imageName, folderName: self.currentFolderName)
+                    self.fileManager.saveImage(image: downloadedImage, imageName: self.imageName, folderName: self.currentFolderName)
                 }
             }
         }.resume()
