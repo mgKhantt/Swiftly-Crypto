@@ -22,42 +22,15 @@ class CoinDataService {
         
         guard let url = URL(string: urlString) else { return }
         
-        coinSubscriptions = URLSession.shared.dataTaskPublisher(for: url)
-            .subscribe(on: DispatchQueue.global(qos: .default))
-            // Run the network request and mapping work on a background thread
-            
-            .tryMap { output -> Data in
-                guard let response = output.response as? HTTPURLResponse,
-                      response.statusCode >= 200 && response.statusCode < 300 else {
-                    throw URLError(.badServerResponse)
-                }
-                return output.data
-            }
-            // Validate the HTTP response.
-            // If it’s not in the 200–299 range, throw an error.
-            // Otherwise, pass along the raw data.
-            
-            .receive(on: DispatchQueue.main)
-            // Deliver the results back on the main thread
-            // (important for updating @Published vars / UI)
-            
+        coinSubscriptions = NetworkingManager.download(url: url )
             .decode(type: [CoinModel].self, decoder: JSONDecoder())
-            // Decode the raw JSON data into an array of CoinModel
-            
-            .sink { completion in
-                switch completion {
-                    case .finished:
-                        // The publisher completed successfully
-                        break
-                    case .failure(let error):
-                        // Handle errors (network, decoding, bad response, etc.)
-                        print(error.localizedDescription)
+            .sink(
+                receiveCompletion: NetworkingManager.handleCompletion,
+                receiveValue: { [weak self] returnedCoins in
+                    self?.allCoins = returnedCoins
+                    self?.coinSubscriptions?.cancel()
                 }
-            } receiveValue: { [weak self] returnedData in
-                // Successfully received the decoded [CoinModel] and add to append
-                self?.allCoins = returnedData
-                self?.coinSubscriptions?.cancel()
-            }
+            )
     }
 
 }

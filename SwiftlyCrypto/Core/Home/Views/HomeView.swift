@@ -22,7 +22,7 @@ struct HomeView: View {
                 
                 columnTitles
                 
-                if !showPortfolio { 
+                if !showPortfolio {
                     allCoinsList
                     .transition(.move(edge: .leading))
                 }
@@ -79,7 +79,7 @@ extension HomeView {
                 CoinRowView(coin: coin, showHoldingColumn: false)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
             }
-        }
+        }.scrollIndicators(.hidden)
         .listStyle(PlainListStyle())
     }
     
@@ -89,7 +89,7 @@ extension HomeView {
                 CoinRowView(coin: coin, showHoldingColumn: true)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
             }
-        }
+        }.scrollIndicators(.hidden)
         .listStyle(PlainListStyle())
     }
     
