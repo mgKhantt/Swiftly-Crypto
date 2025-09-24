@@ -14,6 +14,8 @@ struct PortfolioView: View {
     @State private var quantityText: String = ""
     @State private var showCheckMark: Bool = false
     
+    @Binding var showPortfolioView: Bool
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -29,10 +31,18 @@ struct PortfolioView: View {
             .navigationTitle("Edit Portfolio")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    XMarkButton()
+                    XMarkButton(showPortfolioView: $showPortfolioView)
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    trailingNavBarButtons
+                if #available(iOS 26.0, *) {
+                    if selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText) {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            trailingNavBarButtons
+                        }
+                    }
+                } else {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        trailingNavBarButtons
+                    }
                 }
             }
         }
@@ -40,7 +50,7 @@ struct PortfolioView: View {
 }
 
 #Preview {
-    PortfolioView()
+    PortfolioView(showPortfolioView: .constant(false))
         .environmentObject(dev.homeVM)
 }
 
@@ -97,23 +107,40 @@ extension PortfolioView {
                 Text(getCurrentValue().asCurrencyWith2Decimals())
             }
         }
-        .animation(.none)
         .padding()
         .font(.headline)
     }
     
     private var trailingNavBarButtons: some View {
         HStack(spacing: 10) {
-            Image(systemName: "checkmark")
-                .opacity(showCheckMark ? 1 : 0)
-            Button {} label: {
-                Text("Save".uppercased())
+            if #available(iOS 26.0, *) {
+                if showCheckMark {
+                    Image(systemName: "checkmark")
+                        .glassEffect(.clear)
+                }
+                
+                if selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText) {
+                    Button {
+                        saveButtonPressed()
+                    } label: {
+                        Text("Save".uppercased())
+                    }
+                    .buttonStyle(.glass)
+                    .font(.headline)
+                }
+            } else {
+                Image(systemName: "checkmark")
+                    .opacity(showCheckMark ? 1 : 0)
+                
+                Button {
+                    saveButtonPressed()
+                } label: {
+                    Text("Save".uppercased())
+                }
+                .opacity(selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText) ? 1 : 0)
+                .font(.headline)
             }
-            .opacity(
-                (selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ? 1 : 0
-            )
         }
-        .font(.headline)
     }
 
     private func saveButtonPressed() {

@@ -17,7 +17,7 @@ struct HomeView: View {
         ZStack {
             Color.theme.background.ignoresSafeArea()
                 .sheet(isPresented: $showPortfolioView, content: {
-                    PortfolioView()
+                    PortfolioView(showPortfolioView: $showPortfolioView)
                         .environmentObject(vm)
                 })
                 .onTapGesture {
