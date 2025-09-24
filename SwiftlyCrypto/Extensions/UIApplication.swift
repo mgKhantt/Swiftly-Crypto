@@ -6,7 +6,7 @@
 //
 
 
-import SwiftUICore
+import SwiftUI
 import UIKit
 
 extension View {

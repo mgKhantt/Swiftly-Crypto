@@ -43,7 +43,9 @@ class CoinImageService: ObservableObject {
         guard let url = URL(string: imageURL) else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            
             guard let self = self, let data = data, error == nil else { return }
+            
             if let downloadedImage = UIImage(data: data) {
                 DispatchQueue.main.async {
                     self.image = downloadedImage
@@ -53,7 +55,9 @@ class CoinImageService: ObservableObject {
                 DispatchQueue.global(qos: .background).async {
                     self.fileManager.saveImage(image: downloadedImage, imageName: self.imageName, folderName: self.currentFolderName)
                 }
+                
             }
+            
         }.resume()
     }
 }
