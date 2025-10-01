@@ -20,7 +20,7 @@ struct SearchBarView: View {
             
             TextField("Search by name or symbol...", text: $searchText)
                 .foregroundStyle(
-                    Color.orange
+                    Color.accent
                 )
                 .overlay(
                     Image(systemName: "xmark.circle.fill")
