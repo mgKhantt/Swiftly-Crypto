@@ -75,10 +75,10 @@
 		50B948182E54C8CA00F7BEFF = {
 			isa = PBXGroup;
 			children = (
+				50B948222E54C8CA00F7BEFF /* Products */,
 				50B948232E54C8CA00F7BEFF /* SwiftlyCrypto */,
 				50B948312E54C8CC00F7BEFF /* SwiftlyCryptoTests */,
 				50B9483B2E54C8CC00F7BEFF /* SwiftlyCryptoUITests */,
-				50B948222E54C8CA00F7BEFF /* Products */,
 			);
 			sourceTree = "<group>";
 		};

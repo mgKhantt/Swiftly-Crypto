@@ -50,7 +50,7 @@ struct PortfolioView: View {
                     removeSelectedCoin()
                 }
             }
-        }
+        }.dismissKeyboardOnTap()
     }
 }
 
@@ -160,7 +160,6 @@ extension PortfolioView {
     }
 
     private func saveButtonPressed() {
-        guard let coin = selectedCoin else { return }
         
         guard
             let coin = selectedCoin,
